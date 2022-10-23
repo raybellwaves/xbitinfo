@@ -278,7 +278,8 @@ def _py_get_bitinformation(ds, var, axis, dim, kwargs={}):
         ), "This implementation only supports the plain bitinfo implementation"
     itemsize = ds[var].dtype.itemsize
     view_type = f"i{itemsize}"
-    X = da.array(ds[var]).view(view_type).astype(np.uint)
+    astype = f"u{itemsize}"
+    X = da.array(ds[var]).view(view_type).astype(astype)
     if axis is not None:
         dim = ds[var].dims[axis]
     if isinstance(dim, str):
