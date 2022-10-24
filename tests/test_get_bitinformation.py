@@ -215,3 +215,23 @@ def test_get_bitinformation_different_dtypes(rasm, implementation):
 def test_get_bitinformation_dim_list(rasm, implementation):
     bi = xb.get_bitinformation(rasm, dim=["x", "y"], implementation=implementation)
     assert (bi.dim == ["x", "y"]).all()
+
+
+def test_implementations_agree():
+    """Test whether the python and julia implementation retrieve the same results"""
+    ds = xr.tutorial.load_dataset("rasm")
+    bi_python = xb.get_bitinformation(
+        ds,
+        implementation="python",
+        set_zero_insignificant=False,
+        overwrite=True,
+        masked_value=None,
+    )
+    bi_julia = xb.get_bitinformation(
+        ds,
+        implementation="julia",
+        set_zero_insignificant=False,
+        overwrite=True,
+        masked_value=None,
+    )
+    assert_identical(bi_python, bi_julia)
